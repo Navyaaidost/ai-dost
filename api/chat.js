@@ -15,9 +15,7 @@ export default async function handler(req, res) {
     const { messages } = req.body;
 
     const latestMessage =
-      messages && messages.length > 0
-        ? messages[messages.length - 1].content
-        : "";
+      messages?.[messages.length - 1]?.content || "";
 
     const response = await openai.chat.completions.create({
       model: "gpt-4o-mini",
