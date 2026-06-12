@@ -24,7 +24,7 @@ User: ${latestMessage}
 `;
 
  const model = genAI.getGenerativeModel({
-  model: "gemini-pro",
+  model: "models/gemini-1.5-flash",
 });
     const result = await model.generateContent(prompt);
     const response = result.response.text();
