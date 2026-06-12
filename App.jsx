@@ -487,9 +487,20 @@ function ChatScreen({ profile, plan, chats, setChats, activeAgent, setActiveAgen
         }),
       });
       const data = await res.json();
-      const reply = (data.content || []).filter(b => b.type === 'text').map(b => b.text).join('\n').trim() || "Sorry, I couldn't generate a response — please try again.";
-      setChats(c => ({ ...c, [activeAgent]: [...newHistory, { role: 'assistant', content: reply }] }));
-      setMsgCount(n => n + 1);
+
+const reply =
+  data.reply ||
+  "Sorry, I couldn't generate a response — please try again.";
+
+setChats(c => ({
+  ...c,
+  [activeAgent]: [
+    ...newHistory,
+    { role: 'assistant', content: reply }
+  ]
+}));
+
+setMsgCount(n => n + 1);
     } catch (e) {
       setChats(c => ({ ...c, [activeAgent]: [...newHistory, { role: 'assistant', content: "I couldn't connect just now. Please try again in a moment." }] }));
     } finally {
