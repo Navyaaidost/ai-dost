@@ -10,13 +10,24 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { message } = req.body;
+    const { system, messages } = req.body;
+
+    const latestMessage =
+      messages && messages.length > 0
+        ? messages[messages.length - 1].content
+        : "";
+
+    const prompt = `
+${system || ""}
+
+User: ${latestMessage}
+`;
 
     const model = genAI.getGenerativeModel({
       model: "gemini-1.5-flash",
     });
 
-    const result = await model.generateContent(message);
+    const result = await model.generateContent(prompt);
     const response = result.response.text();
 
     return res.status(200).json({
