@@ -20,6 +20,9 @@ export default async function handler(req, res) {
     res.status(200).json({
       reply: response.choices[0].message.content,
     });
+    export default function handler(req, res) {
+  res.status(200).json({ message: "API working ✔️" });
+}
   } catch (err) {
     res.status(500).json({ error: "AI failed" });
   }
