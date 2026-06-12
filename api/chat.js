@@ -1,29 +1,33 @@
-import OpenAI from "openai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
-    return res.status(405).json({ error: "Only POST allowed" });
+    return res.status(405).json({
+      error: "Only POST requests allowed",
+    });
   }
 
-  const { message } = req.body;
-
   try {
-    const response = await client.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [{ role: "user", content: message }],
+    const { message } = req.body;
+
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash",
     });
 
-    res.status(200).json({
-      reply: response.choices[0].message.content,
+    const result = await model.generateContent(message);
+    const response = result.response.text();
+
+    return res.status(200).json({
+      reply: response,
     });
-    export default function handler(req, res) {
-  res.status(200).json({ message: "API working ✔️" });
-}
-  } catch (err) {
-    res.status(500).json({ error: "AI failed" });
+  } catch (error) {
+    console.error("Gemini Error:", error);
+
+    return res.status(500).json({
+      error: "AI failed",
+      details: error.message,
+    });
   }
 }
