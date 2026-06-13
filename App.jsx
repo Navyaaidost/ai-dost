@@ -502,11 +502,27 @@ setChats(c => ({
 
 setMsgCount(n => n + 1);
     } catch (e) {
-      setChats(c => ({ ...c, [activeAgent]: [...newHistory, { role: 'assistant', content: "I couldn't connect just now. Please try again in a moment." }] }));
-    } finally {
-      setLoading(false);
-    }
+  const fallbackReplies = {
+    study: "📚 Create a 2-hour focused study plan today. Focus on one subject at a time and avoid multitasking.",
+    career: "🚀 Tell me your interests, skills, and goals, and I'll suggest suitable career paths.",
+    finance: "💰 Track every expense today and try following the 50/30/20 budgeting rule."
   };
+
+  setChats(c => ({
+    ...c,
+    [activeAgent]: [
+      ...newHistory,
+      {
+        role: 'assistant',
+        content:
+          fallbackReplies[activeAgent] ||
+          "AI is temporarily unavailable. Please try again later."
+      }
+    ]
+  }));
+} finally {
+  setLoading(false);
+}
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
