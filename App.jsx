@@ -520,11 +520,13 @@ setMsgCount(n => n + 1);
       }
     ]
   }));
-} finally {
+} } finally {
   setLoading(false);
 }
 
-  return (
+};
+
+return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       <ScreenHeader icon={meta.icon} title={meta.label} subtitle={meta.tagline} color={meta.color} />
 
